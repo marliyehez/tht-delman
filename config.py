@@ -5,7 +5,8 @@ JOBS = [
     {
         "id": "job1",
         "func": "__main__:update_vaccine_info",
-        "trigger": "interval",
-        "seconds": 5
-        }
+        "trigger": "cron",
+        "hour": 2,
+        "minute": 0,
+    }
 ]
