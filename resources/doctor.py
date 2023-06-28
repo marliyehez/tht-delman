@@ -78,11 +78,12 @@ def handling_a_doctor(doctor_id):
         doctor_data['birthdate'] = datetime.fromisoformat(doctor_data['birthdate']).date()
         doctor_data['work_start_time'] = datetime.strptime(doctor_data['work_start_time'], "%H:%M:%S").time()
         doctor_data['work_end_time'] = datetime.strptime(doctor_data['work_end_time'], "%H:%M:%S").time()
+        doctor = Doctor.query.filter_by(id=doctor_id).first()
 
         # Update the login data
         selected_keys = ["username", "password"]
         login_data = {key: doctor_data[key] for key in selected_keys if key in doctor_data.keys()}
-        login = Login.query.filter_by(username=login_data["username"]).update(login_data)
+        login = Login.query.filter_by(id=doctor.login_id).update(login_data)
         db.session.commit()
 
         # Update the doctor data
@@ -92,8 +93,8 @@ def handling_a_doctor(doctor_id):
         db.session.commit()
 
         # Retrieve the data back
-        login = Login.query.filter_by(username=login_data["username"]).first()
         doctor = Doctor.query.filter_by(id=doctor_id).first()
+        login = Login.query.filter_by(id=doctor.login_id).first()
 
     elif request.method == 'DELETE':
         doctor = Doctor.query.filter_by(id=doctor_id).first()
