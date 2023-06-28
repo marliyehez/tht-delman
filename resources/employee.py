@@ -73,22 +73,24 @@ def handling_an_employee(employee_id):
         employee_data = request.get_json()
         employee_data['birthdate'] = datetime.fromisoformat(employee_data['birthdate']).date()
         employee_data['password'] = bcrypt.hashpw(employee_data['password'].encode('utf-8'), bcrypt.gensalt())
+        employee = Employee.query.filter_by(id=employee_id).first()
 
         # Update the login data
         selected_keys = ["username", "password"]
-        login_data = {key: employee_data[key] for key in selected_keys}
-        login = Login.query.filter_by(username=login_data["username"]).update(login_data)
+        login_data = {key: employee_data[key] for key in selected_keys if key in employee_data.keys()}
+        login = Login.query.filter_by(id=employee.login_id).update(login_data)
         db.session.commit()
 
         # Update the employee data
         selected_keys = ["name", "gender", "birthdate"]
-        employee_data = {key: employee_data[key] for key in selected_keys}
+        employee_data = {key: employee_data[key] for key in selected_keys if key in employee_data.keys()}
         employee = Employee.query.filter_by(id=employee_id).update(employee_data)
         db.session.commit()
 
         # Retrieve the data back
-        login = Login.query.filter_by(username=login_data["username"]).first()
         employee = Employee.query.filter_by(id=employee_id).first()
+        login = Login.query.filter_by(id=employee.login_id).first()
+        
 
     elif request.method == 'DELETE':
         employee = Employee.query.filter_by(id=employee_id).first()
