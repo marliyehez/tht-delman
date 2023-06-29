@@ -60,6 +60,5 @@ def update_vaccine_info():
 # Scheduler
 scheduler = APScheduler()
 scheduler.init_app(app)
-scheduler.add_job(id="job1", func=update_vaccine_info, trigger="interval", seconds=15)
+scheduler.add_job(id="job1", func=update_vaccine_info, trigger="cron", hour=2, minute=0)
 scheduler.start()
-
