@@ -1,5 +1,6 @@
 from flask import Blueprint, request
-from ..model import db, Appointment, StatusEnum, Doctor, employee_required
+from ..model import db, Appointment, StatusEnum, Doctor
+from ..auth import employee_required
 from datetime import datetime
 
 
@@ -46,7 +47,7 @@ def handling_appointments():
         if (
             time_requested in [
                 appointment.datetm for appointment in doctor.appointments 
-                                   if appointment.status.value
+                                   if appointment.status.value == "IN_QUEUE"
             ]
         ):
             return {"message": "Failed. The requested appointment time has already been booked by another patient."}
