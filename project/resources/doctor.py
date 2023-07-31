@@ -1,5 +1,6 @@
 from flask import Blueprint, request
-from ..model import db, Login, Doctor, employee_required
+from ..model import db, Login, Doctor
+from ..auth import employee_required
 from sqlalchemy.exc import IntegrityError
 from datetime import datetime
 import bcrypt
@@ -31,7 +32,7 @@ def handling_doctors():
     
         # Get and transform the data
         doctor_data = request.get_json()
-        doctor_data['password'] = bcrypt.hashpw(doctor_data['password'].encode('utf-8'), bcrypt.gensalt())
+        doctor_data['password'] = bcrypt.hashpw(doctor_data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
         doctor_data['birthdate'] = datetime.fromisoformat(doctor_data['birthdate']).date()
         doctor_data['work_start_time'] = datetime.strptime(doctor_data['work_start_time'], "%H:%M:%S").time()
         doctor_data['work_end_time'] = datetime.strptime(doctor_data['work_end_time'], "%H:%M:%S").time()
