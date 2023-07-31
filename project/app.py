@@ -39,7 +39,7 @@ def update_vaccine_info():
         no_ktp_list = ', '.join(no_ktp_list)
 
         if no_ktp_list:
-            client = bigquery.Client.from_service_account_json('my-project-390806-aa5f821735e0.json')
+            client = bigquery.Client.from_service_account_json('my-project-390806-8bdde486c5da.json')
             query = f"""
                 SELECT CAST(no_ktp AS STRING) AS no_ktp, vaccine_type, vaccine_count
                 FROM `my-project-390806.tht.vaccine-data-dummy`
@@ -60,5 +60,5 @@ def update_vaccine_info():
 # Scheduler
 scheduler = APScheduler()
 scheduler.init_app(app)
-scheduler.add_job(id="job1", func=update_vaccine_info, trigger="cron", hour=2, minute=0)
+scheduler.add_job(id="job1", func=update_vaccine_info, trigger="interval", seconds=15)
 scheduler.start()
