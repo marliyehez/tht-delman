@@ -1,5 +1,6 @@
 from flask import Blueprint, request
-from ..model import db, Patient, employee_required
+from ..model import db, Patient
+from ..auth import employee_required
 from sqlalchemy.exc import IntegrityError
 from datetime import datetime
 
