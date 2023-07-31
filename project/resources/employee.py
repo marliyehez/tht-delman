@@ -1,5 +1,6 @@
 from flask import Blueprint, request
-from ..model import db, Login, Employee, employee_required
+from ..model import db, Login, Employee
+from ..auth import employee_required
 from sqlalchemy.exc import IntegrityError
 from datetime import datetime
 import bcrypt
@@ -30,7 +31,7 @@ def handling_employees():
         # Get and transform the data
         employee_data = request.get_json()
         employee_data['birthdate'] = datetime.fromisoformat(employee_data['birthdate']).date()
-        employee_data['password'] = bcrypt.hashpw(employee_data['password'].encode('utf-8'), bcrypt.gensalt())
+        employee_data['password'] = bcrypt.hashpw(employee_data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
         try:
             # Insert login data
